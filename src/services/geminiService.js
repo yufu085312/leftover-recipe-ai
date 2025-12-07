@@ -26,29 +26,57 @@ class GeminiService {
     }
   }
 
+  // Get current model name from storage
+  getModel() {
+    return storage.getGeminiModel();
+  }
+
   // Check if API is ready
   isReady() {
     return this.client !== null;
   }
 
   // Generate recipes based on ingredients and constraints
-  async generateRecipes(ingredients, constraints) {
+  async generateRecipes(ingredients, constraints = {}) {
     if (!this.isReady()) {
-      throw new Error('Gemini APIが初期化されていません。設定でAPIキーを入力してください。');
+      throw new Error('Gemini APIが初期化されていません。');
     }
 
     const prompt = this.buildRecipePrompt(ingredients, constraints);
 
     try {
       const response = await this.client.models.generateContent({
-        model: 'gemini-2.5-flash',
+        model: this.getModel(),
         contents: prompt
       });
       
       return this.parseRecipesFromResponse(response.text);
     } catch (error) {
-      console.error('Error generating recipes:', error);
-      throw new Error('レシピの生成に失敗しました: ' + error.message);
+      const currentModel = this.getModel();
+      console.error(`Error generating recipes with ${currentModel}:`, error);
+
+      // Check for rate limit error (429)
+      if (error.message && error.message.includes('429')) {
+        throw new Error(`RATE_LIMIT: モデル「${currentModel}」のレート制限に達しました。別のモデルを試すか、しばらく待ってください。`);
+      }
+
+      // Check for quota exceeded
+      if (error.message && (error.message.includes('quota') || error.message.includes('RESOURCE_EXHAUSTED'))) {
+        throw new Error(`QUOTA_EXCEEDED: モデル「${currentModel}」の利用枠を超過しました（RPD制限など）。`);
+      }
+
+      // Check for invalid API key
+      if (error.message && (error.message.includes('API key') || error.message.includes('401'))) {
+        throw new Error('INVALID_KEY: APIキーが無効です。設定から正しいAPIキーを入力してください。');
+      }
+
+      // Check for not found (model not supported)
+      if (error.message && (error.message.includes('404') || error.message.includes('not found'))) {
+        throw new Error(`MODEL_ERROR: モデル「${currentModel}」が見つかりません。別のモデルを選択してください。`);
+      }
+
+      // Generic error
+      throw new Error(`レシピの生成に失敗しました (${currentModel}): ` + error.message);
     }
   }
 
@@ -62,13 +90,30 @@ class GeminiService {
 
     try {
       const response = await this.client.models.generateContent({
-        model: 'gemini-2.5-flash',
+        model: this.getModel(),
         contents: prompt
       });
       
       return this.parseRecipeFromResponse(response.text);
     } catch (error) {
       console.error('Error refining recipe:', error);
+
+      // Check for rate limit error (429)
+      if (error.message && error.message.includes('429')) {
+        throw new Error('RATE_LIMIT: Gemini APIのレート制限に達しました。しばらく時間をおいてから再度お試しください。');
+      }
+
+      // Check for quota exceeded
+      if (error.message && (error.message.includes('quota') || error.message.includes('RESOURCE_EXHAUSTED'))) {
+        throw new Error('QUOTA_EXCEEDED: APIの利用枠を超過しました。APIキーの使用状況を確認してください。');
+      }
+
+      // Check for invalid API key
+      if (error.message && (error.message.includes('API key') || error.message.includes('401'))) {
+        throw new Error('INVALID_KEY: APIキーが無効です。設定から正しいAPIキーを入力してください。');
+      }
+
+      // Generic error
       throw new Error('レシピの修正に失敗しました: ' + error.message);
     }
   }

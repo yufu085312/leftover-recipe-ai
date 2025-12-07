@@ -1,15 +1,54 @@
 import { geminiService } from '../services/geminiService.js';
+import { unsplashService } from '../services/unsplashService.js';
 
 class RecipeDisplay {
   constructor(containerId) {
     this.container = document.getElementById(containerId);
     this.recipes = [];
+    this.recipeImages = new Map(); // Store loaded images
     this.expandedRecipe = null;
   }
 
-  displayRecipes(recipes) {
+  async displayRecipes(recipes) {
     this.recipes = recipes;
     this.render();
+
+    // Load images asynchronously
+    await this.loadRecipeImages();
+  }
+
+  async loadRecipeImages() {
+    for (let i = 0; i < this.recipes.length; i++) {
+      try {
+        const image = await unsplashService.searchRecipeImage(this.recipes[i].title);
+        this.recipeImages.set(i, image);
+
+        // Track download (Unsplash API requirement)
+        if (image.downloadUrl) {
+          unsplashService.trackDownload(image.downloadUrl);
+        }
+
+        // Update the specific card with the image
+        this.updateRecipeCardImage(i, image);
+      } catch (error) {
+        console.error(`Error loading image for recipe ${i}:`, error);
+      }
+    }
+  }
+
+  updateRecipeCardImage(index, image) {
+    const card = this.container.querySelector(`.recipe-card[data-index="${index}"]`);
+    if (!card) return;
+
+    const imageContainer = card.querySelector('.recipe-card-image');
+    if (imageContainer) {
+      imageContainer.innerHTML = `
+        <img src="${image.smallUrl}" alt="${image.alt}" loading="lazy" />
+        <div class="image-credit">
+          Photo by <a href="${image.photographerUrl}?utm_source=leftover-recipe-ai&utm_medium=referral" target="_blank" rel="noopener">${image.photographer}</a> on <a href="https://unsplash.com?utm_source=leftover-recipe-ai&utm_medium=referral" target="_blank" rel="noopener">Unsplash</a>
+        </div>
+      `;
+    }
   }
 
   render() {
@@ -29,9 +68,23 @@ class RecipeDisplay {
 
   renderRecipeCard(recipe, index) {
     const isExpanded = this.expandedRecipe === index;
+    const image = this.recipeImages.get(index);
     
     return `
       <div class="recipe-card" data-index="${index}">
+        <div class="recipe-card-image">
+          ${image ? `
+            <img src="${image.smallUrl}" alt="${image.alt}" loading="lazy" />
+            <div class="image-credit">
+              Photo by <a href="${image.photographerUrl}?utm_source=leftover-recipe-ai&utm_medium=referral" target="_blank" rel="noopener">${image.photographer}</a> on <a href="https://unsplash.com?utm_source=leftover-recipe-ai&utm_medium=referral" target="_blank" rel="noopener">Unsplash</a>
+            </div>
+          ` : `
+            <div class="image-placeholder">
+              <div class="loading-spinner-small"></div>
+              <p>画像を読み込み中...</p>
+            </div>
+          `}
+        </div>
         <div class="recipe-card-header">
           <h4 class="recipe-card-title">${recipe.title}</h4>
           <div class="recipe-card-meta">

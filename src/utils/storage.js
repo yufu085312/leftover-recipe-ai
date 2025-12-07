@@ -5,6 +5,8 @@ export const storage = {
     INGREDIENTS: 'leftover_ingredients',
     CONSTRAINTS: 'leftover_constraints',
     API_KEY: 'gemini_api_key',
+    GEMINI_MODEL: 'gemini_model',
+    UNSPLASH_KEY: 'unsplash_api_key',
     FAVORITES: 'favorite_recipes'
   },
 
@@ -74,6 +76,26 @@ export const storage = {
   // Save API key
   saveApiKey(apiKey) {
     return this.set(this.KEYS.API_KEY, apiKey);
+  },
+
+  // Get Unsplash API key
+  getUnsplashKey() {
+    return this.get(this.KEYS.UNSPLASH_KEY);
+  },
+
+  // Save Unsplash API key
+  saveUnsplashKey(apiKey) {
+    return this.set(this.KEYS.UNSPLASH_KEY, apiKey);
+  },
+
+  // Get Gemini model
+  getGeminiModel() {
+    return this.get(this.KEYS.GEMINI_MODEL) || 'gemini-2.5-flash'; // Default to stable model
+  },
+
+  // Save Gemini model
+  saveGeminiModel(model) {
+    return this.set(this.KEYS.GEMINI_MODEL, model);
   },
 
   // Get favorites
