@@ -230,7 +230,7 @@ class App {
     if (currentUnsplashKey) {
       unsplashKeyInput.value = currentUnsplashKey;
     } else {
-      unsplashKeyInput.placeholder = 'デモキー使用中（独自キーで制限を拡大可能）';
+      unsplashKeyInput.placeholder = '独自キーで制限を拡大可能';
     }
 
     modal.classList.add('active');
@@ -305,7 +305,7 @@ class App {
   deleteUnsplashKey() {
     const unsplashKeyInput = document.getElementById('unsplashKeyInput');
 
-    if (!confirm('Unsplash APIキーを削除してデモキーに戻しますか？')) {
+    if (!confirm('Unsplash APIキーを削除しますか？')) {
       return;
     }
 
@@ -315,10 +315,10 @@ class App {
     // Clear input field
     unsplashKeyInput.value = '';
 
-    // Reset to demo key
+    // Reset service state (clear key)
     unsplashService.loadAccessKey();
 
-    this.showToast('🗑️ Unsplash APIキーを削除しました（デモキーを使用）', 'info');
+    this.showToast('🗑️ Unsplash APIキーを削除しました', 'info');
   }
 
 

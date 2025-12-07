@@ -3,19 +3,15 @@ import { storage } from '../utils/storage.js';
 
 class UnsplashService {
   constructor() {
-    // Demo Access Key for development/testing
-    // Rate limit: 50 requests/hour
-    this.demoAccessKey = 'eR5ko01S-xOqFi4K8u-g0i-0zk4Qxsye6YEY7nGOKWs';
     this.apiUrl = 'https://api.unsplash.com';
     
-    // Use user's key if available, otherwise use demo key
+    // Load access key from storage
     this.loadAccessKey();
   }
 
-  // Load access key from storage or use demo key
+  // Load access key from storage
   loadAccessKey() {
-    const userKey = storage.getUnsplashKey();
-    this.accessKey = userKey || this.demoAccessKey;
+    this.accessKey = storage.getUnsplashKey();
   }
 
   // Set custom access key
@@ -24,13 +20,17 @@ class UnsplashService {
     storage.saveUnsplashKey(apiKey);
   }
 
-  // Check if using demo key
-  isUsingDemoKey() {
-    return this.accessKey === this.demoAccessKey;
+  // Check if access key is available
+  get hasAccessKey() {
+    return !!this.accessKey;
   }
 
   // Search for food images based on recipe title
   async searchRecipeImage(recipeTitle) {
+    if (!this.hasAccessKey) {
+      return null;
+    }
+
     try {
       // Clean recipe title for better search results
       const searchQuery = this.cleanRecipeTitle(recipeTitle);
@@ -41,7 +41,7 @@ class UnsplashService {
         per_page: '1',
         orientation: 'landscape',
         content_filter: 'high',
-        client_id: this.accessKey // Use client_id query param instead of Authorization header for some endpoints
+        client_id: this.accessKey
       });
       
       const response = await fetch(
@@ -71,11 +71,11 @@ class UnsplashService {
         };
       }
       
-      // Return fallback image if no results
-      return this.getFallbackImage(recipeTitle);
+      // Return null if no results
+      return null;
     } catch (error) {
       console.error('Error fetching Unsplash image:', error);
-      return this.getFallbackImage(recipeTitle);
+      return null;
     }
   }
 

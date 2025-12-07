@@ -69,22 +69,25 @@ class RecipeDisplay {
   renderRecipeCard(recipe, index) {
     const isExpanded = this.expandedRecipe === index;
     const image = this.recipeImages.get(index);
+    const hasUnsplashKey = unsplashService.hasAccessKey;
     
     return `
       <div class="recipe-card" data-index="${index}">
-        <div class="recipe-card-image">
-          ${image ? `
-            <img src="${image.smallUrl}" alt="${image.alt}" loading="lazy" />
-            <div class="image-credit">
-              Photo by <a href="${image.photographerUrl}?utm_source=leftover-recipe-ai&utm_medium=referral" target="_blank" rel="noopener">${image.photographer}</a> on <a href="https://unsplash.com?utm_source=leftover-recipe-ai&utm_medium=referral" target="_blank" rel="noopener">Unsplash</a>
-            </div>
-          ` : `
-            <div class="image-placeholder">
-              <div class="loading-spinner-small"></div>
-              <p>画像を読み込み中...</p>
-            </div>
-          `}
-        </div>
+        ${hasUnsplashKey ? `
+          <div class="recipe-card-image">
+            ${image ? `
+              <img src="${image.smallUrl}" alt="${image.alt}" loading="lazy" />
+              <div class="image-credit">
+                Photo by <a href="${image.photographerUrl}?utm_source=leftover-recipe-ai&utm_medium=referral" target="_blank" rel="noopener">${image.photographer}</a> on <a href="https://unsplash.com?utm_source=leftover-recipe-ai&utm_medium=referral" target="_blank" rel="noopener">Unsplash</a>
+              </div>
+            ` : `
+              <div class="image-placeholder">
+                <div class="loading-spinner-small"></div>
+                <p>画像を読み込み中...</p>
+              </div>
+            `}
+          </div>
+        ` : ''}
         <div class="recipe-card-header">
           <h4 class="recipe-card-title">${recipe.title}</h4>
           <div class="recipe-card-meta">
