@@ -1,0 +1,17 @@
+{
+  "name": "leftover-recipe-ai",
+  "version": "1.0.0",
+  "type": "module",
+  "description": "AI-powered recipe generator from leftover ingredients",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "devDependencies": {
+    "vite": "^6.0.1"
+  },
+  "dependencies": {
+    "@google/genai": "^1.31.0"
+  }
+}

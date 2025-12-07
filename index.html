@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="冷蔵庫の残り物から美味しいレシピをAIが提案。調理時間や好みに合わせてカスタマイズ可能。">
+  <meta name="keywords" content="レシピ, AI, 冷蔵庫, 残り物, 料理, 簡単, 時短">
+  <meta name="author" content="Leftover Recipe AI">
+  
+  <!-- Open Graph -->
+  <meta property="og:title" content="冷蔵庫残り物レシピ提案AI">
+  <meta property="og:description" content="冷蔵庫にあるもので、AIがユニークなレシピを提案します">
+  <meta property="og:type" content="website">
+  
+  <title>冷蔵庫残り物レシピ提案AI</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700&family=Outfit:wght@400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/src/styles/main.css">
+</head>
+<body>
+  <div id="app">
+    <!-- Header -->
+    <header class="header">
+      <div class="container">
+        <h1 class="logo">🍳 冷蔵庫レシピAI</h1>
+        <button id="settingsBtn" class="btn-icon" aria-label="設定">⚙️</button>
+      </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="main">
+      <div class="container">
+        <!-- Hero Section -->
+        <section class="hero">
+          <h2 class="hero-title">冷蔵庫の残り物から<br>美味しいレシピを発見</h2>
+          <p class="hero-subtitle">AIがあなたの食材で、ユニークなレシピを提案します</p>
+        </section>
+
+        <!-- Ingredient Form Section -->
+        <section class="section">
+          <div class="card">
+            <h3 class="section-title">🥬 食材を登録</h3>
+            <div id="ingredientForm"></div>
+          </div>
+        </section>
+
+        <!-- Constraints Form Section -->
+        <section class="section">
+          <div class="card">
+            <h3 class="section-title">⚙️ 条件を設定</h3>
+            <div id="constraintsForm"></div>
+          </div>
+        </section>
+
+        <!-- Generate Button -->
+        <div class="section text-center">
+          <button id="generateBtn" class="btn btn-primary btn-large" disabled>
+            <span class="btn-icon">✨</span>
+            <span>レシピを生成</span>
+          </button>
+        </div>
+
+        <!-- Recipes Display -->
+        <section id="recipesSection" class="section hidden">
+          <h3 class="section-title">📖 提案されたレシピ</h3>
+          <div id="recipeDisplay"></div>
+        </section>
+      </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+      <div class="container">
+        <p>Powered by Google Gemini AI</p>
+      </div>
+    </footer>
+  </div>
+
+  <!-- Settings Modal -->
+  <div id="settingsModal" class="modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3>⚙️ 設定</h3>
+        <button id="closeModalBtn" class="btn-icon" aria-label="閉じる">✕</button>
+      </div>
+      <div class="modal-body">
+        <div class="form-group">
+          <label for="apiKeyInput">Gemini APIキー</label>
+          <input 
+            type="password" 
+            id="apiKeyInput" 
+            class="input" 
+            placeholder="AIxxxxxxxxxxxxxxxxx"
+          >
+          <p class="help-text">
+            APIキーは<a href="https://makersuite.google.com/app/apikey" target="_blank" rel="noopener">Google AI Studio</a>で取得できます
+          </p>
+        </div>
+        <button id="saveApiKeyBtn" class="btn btn-primary">保存</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Loading Overlay -->
+  <div id="loadingOverlay" class="loading-overlay hidden">
+    <div class="loading-spinner"></div>
+    <p id="loadingMessage">✨ AIがレシピを考えています...</p>
+    <p id="loadingSubMessage" style="font-size: var(--font-size-sm); color: var(--color-text-secondary); margin-top: -1rem; animation: pulse 2s ease-in-out infinite;">しばらくお待ちください</p>
+  </div>
+
+  <script type="module" src="/src/main.js"></script>
+</body>
+</html>
