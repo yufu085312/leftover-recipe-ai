@@ -45,6 +45,10 @@ class App {
     const saveApiKeyBtn = document.getElementById('saveApiKeyBtn');
     saveApiKeyBtn.addEventListener('click', () => this.saveApiKey());
 
+    // Delete API key button
+    const deleteApiKeyBtn = document.getElementById('deleteApiKeyBtn');
+    deleteApiKeyBtn.addEventListener('click', () => this.deleteApiKey());
+
     // Close modal on backdrop click
     const settingsModal = document.getElementById('settingsModal');
     settingsModal.addEventListener('click', (e) => {
@@ -77,13 +81,26 @@ class App {
 
   updateGenerateButtonState() {
     const generateBtn = document.getElementById('generateBtn');
+    const statusText = document.getElementById('generateBtnStatus');
     const ingredients = this.ingredientForm.getIngredients();
     const hasApiKey = geminiService.isReady() || storage.getApiKey();
     
-    if (ingredients.length > 0 && hasApiKey) {
-      generateBtn.disabled = false;
+    // Reset
+    generateBtn.disabled = true;
+    statusText.innerHTML = '';
+    statusText.style.color = 'var(--color-text-muted)';
+
+    // Check conditions
+    if (!hasApiKey) {
+      statusText.innerHTML = '⚙️ <strong>Gemini APIキーを設定してください</strong> → 右上の設定ボタンから';
+      statusText.style.color = 'var(--color-secondary)';
+    } else if (ingredients.length === 0) {
+      statusText.innerHTML = '🥬 <strong>食材を追加してください</strong>';
+      statusText.style.color = 'var(--color-text-secondary)';
     } else {
-      generateBtn.disabled = true;
+      generateBtn.disabled = false;
+      statusText.innerHTML = '✅ レシピ生成の準備ができました！';
+      statusText.style.color = 'var(--color-accent)';
     }
   }
 
@@ -167,6 +184,28 @@ class App {
     } else {
       alert('APIキーの初期化に失敗しました');
     }
+  }
+
+  deleteApiKey() {
+    const apiKeyInput = document.getElementById('apiKeyInput');
+
+    // Confirm deletion
+    if (!confirm('APIキーを削除してもよろしいですか？\n\n削除後は再度設定する必要があります。')) {
+      return;
+    }
+
+    // Remove from storage
+    storage.remove(storage.KEYS.API_KEY);
+
+    // Clear input field
+    apiKeyInput.value = '';
+
+    // Reset Gemini service
+    geminiService.client = null;
+
+    // Update UI
+    this.showToast('🗑️ APIキーを削除しました', 'info');
+    this.updateGenerateButtonState();
   }
 
   showToast(message, type = 'success') {

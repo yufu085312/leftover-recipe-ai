@@ -59,6 +59,7 @@
             <span class="btn-icon">✨</span>
             <span>レシピを生成</span>
           </button>
+          <p id="generateBtnStatus" class="help-text" style="margin-top: var(--space-md); font-size: var(--font-size-base);"></p>
         </div>
 
         <!-- Recipes Display -->
@@ -95,7 +96,10 @@
             placeholder="AIxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
           >
         </div>
-        <button id="saveApiKeyBtn" class="btn btn-primary" style="width: 100%; margin-bottom: 1.5rem;">💾 APIキーを保存</button>
+        <div style="display: flex; gap: var(--space-sm);">
+          <button id="saveApiKeyBtn" class="btn btn-primary" style="flex: 1;">💾 APIキーを保存</button>
+          <button id="deleteApiKeyBtn" class="btn btn-secondary" style="flex: 1;">🗑️ APIキーを削除</button>
+        </div>
         
         <!-- Instructions -->
         <div
