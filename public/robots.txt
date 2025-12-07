@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://ai-recipe.yu-fu.site/sitemap.xml
