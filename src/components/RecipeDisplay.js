@@ -117,7 +117,7 @@ class RecipeDisplay {
               type="text" 
               class="input refine-input" 
               data-index="${index}"
-              placeholder="カスタム指示（例: ベジタリアン向けに）"
+              placeholder="カスタム指示"
             >
             <button class="btn btn-secondary refine-custom-btn" data-index="${index}">
               修正
