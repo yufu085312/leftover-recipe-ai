@@ -85,19 +85,77 @@
         <button id="closeModalBtn" class="btn-icon" aria-label="閉じる">✕</button>
       </div>
       <div class="modal-body">
+        <!-- API Key Input -->
         <div class="form-group">
           <label for="apiKeyInput">Gemini APIキー</label>
           <input 
             type="password" 
             id="apiKeyInput" 
             class="input" 
-            placeholder="AIxxxxxxxxxxxxxxxxx"
+            placeholder="AIxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
           >
-          <p class="help-text">
-            APIキーは<a href="https://makersuite.google.com/app/apikey" target="_blank" rel="noopener">Google AI Studio</a>で取得できます
-          </p>
         </div>
-        <button id="saveApiKeyBtn" class="btn btn-primary">保存</button>
+        <button id="saveApiKeyBtn" class="btn btn-primary" style="width: 100%; margin-bottom: 1.5rem;">💾 APIキーを保存</button>
+        
+        <!-- Instructions -->
+        <div
+          style="background: var(--color-bg-tertiary); padding: var(--space-md); border-radius: var(--radius-md); border: 1px solid var(--color-border);">
+          <h4
+            style="font-family: var(--font-secondary); font-size: var(--font-size-lg); font-weight: 600; margin-bottom: var(--space-md); color: var(--color-primary-light);">
+            📝 APIキーの取得方法
+          </h4>
+        
+          <div style="color: var(--color-text-secondary); font-size: var(--font-size-sm); line-height: 1.8;">
+            <p style="margin-bottom: var(--space-sm); font-weight: 500; color: var(--color-text-primary);">
+              <strong>ステップ1: Google AI Studioにアクセス</strong>
+            </p>
+            <p style="margin-bottom: var(--space-md); padding-left: var(--space-md);">
+              <a href="https://aistudio.google.com/app/apikey" target="_blank" rel="noopener"
+                style="color: var(--color-primary-light); text-decoration: none; font-weight: 500;">
+                🔗 Google AI Studio
+              </a> を開いてください
+            </p>
+        
+            <p style="margin-bottom: var(--space-sm); font-weight: 500; color: var(--color-text-primary);">
+              <strong>ステップ2: Googleアカウントでログイン</strong>
+            </p>
+            <p style="margin-bottom: var(--space-md); padding-left: var(--space-md);">
+              お持ちのGoogleアカウントでログインしてください
+            </p>
+        
+            <p style="margin-bottom: var(--space-sm); font-weight: 500; color: var(--color-text-primary);">
+              <strong>ステップ3: APIキーを作成</strong>
+            </p>
+            <ul style="margin-bottom: var(--space-md); padding-left: var(--space-xl); list-style: disc;">
+              <li>「<strong>Create API key</strong>」または「<strong>Get API key</strong>」ボタンをクリック</li>
+              <li>「<strong>Create API key in new project</strong>」を選択（推奨）</li>
+              <li>APIキーが生成されます（<code
+                  style="background: var(--color-bg-primary); padding: 2px 6px; border-radius: 4px; color: var(--color-primary-light);">AIza...</code>
+                で始まる文字列）</li>
+            </ul>
+        
+            <p style="margin-bottom: var(--space-sm); font-weight: 500; color: var(--color-text-primary);">
+              <strong>ステップ4: APIキーをコピー</strong>
+            </p>
+            <p style="margin-bottom: var(--space-md); padding-left: var(--space-md);">
+              表示されたAPIキーをコピーして、上の入力欄に貼り付けてください
+            </p>
+        
+            <div
+              style="margin-top: var(--space-lg); padding: var(--space-md); background: rgba(255, 200, 87, 0.1); border: 1px solid rgba(255, 200, 87, 0.3); border-radius: var(--radius-sm);">
+              <p style="margin-bottom: var(--space-xs); font-weight: 600; color: var(--color-secondary);">
+                💡 重要な注意事項
+              </p>
+              <ul style="padding-left: var(--space-lg); list-style: disc; font-size: var(--font-size-xs);">
+                <li style="margin-bottom: var(--space-xs);">APIキーは<strong>ブラウザのLocalStorageに保存</strong>されます（安全です）</li>
+                <li style="margin-bottom: var(--space-xs);">APIキーは<strong>他人と共有しない</strong>でください</li>
+                <li style="margin-bottom: var(--space-xs);">Gemini APIは<strong>無料枠</strong>があります（1日1,500リクエストまで）</li>
+                <li>詳細は<a href="https://ai.google.dev/pricing" target="_blank" rel="noopener"
+                    style="color: var(--color-primary-light); text-decoration: underline;">料金ページ</a>をご確認ください</li>
+              </ul>
+            </div>
+          </div>
+          </div>
       </div>
     </div>
   </div>
